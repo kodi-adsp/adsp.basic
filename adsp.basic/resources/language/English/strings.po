@@ -1,0 +1,201 @@
+# KODI Media Center language file
+# Addon Name: Basic ADSP Addon
+# Addon id: adsp.basic
+# Addon version: 0.1.0
+# Addon Provider: Alwin Esch, Team KODI
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Main\n"
+"Report-Msgid-Bugs-To: http://trac.kodi.tv/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-main/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#settings labels
+
+msgctxt "#30000"
+msgid "Stereo (Dolby ProLogic II)"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Input resampler"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Performs a Multichannel 5.1 downmix to Stereo 2.0 in Dolby ProLogic II format"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Dolby Pro Logic II is a complementary encoding/decoding system. Although it is similar in design to the standard Dolby Surround system, there are significant improvements in the newer version. In addition to a much-improved steering action leading to more stable imaging, the surround channels are full bandwidth and stereo. This makes the system a 5-2-5 encoding system. It is completely backward compatible with the original Dolby Pro Logic decoder, so any program encoded in Dolby Pro Logic II will play back correctly on a Dolby Surround system.\n\nThe output of the encoder is a stereo signal referred to as Lt/Rt. There is no obvious difference between an Lt/Rt signal encoded as Dolby Surround or Pro Logic II, and the signal can be treated as any conventional stereo signal for storage, transmission and distribution."
+msgstr ""
+
+msgctxt "#30004"
+msgid "Speaker correction"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Correct the volume and speaker distance on specific supported channels"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Stereo surround encoder"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Speaker gain and distance adjustment"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Speaker Gain..."
+msgstr ""
+
+msgctxt "#30012"
+msgid "Speaker Distance..."
+msgstr ""
+
+msgctxt "#30021"
+msgid "Speaker gain"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Speaker gain test sound"
+msgstr ""
+
+msgctxt "#30031"
+msgid "Front left"
+msgstr ""
+
+msgctxt "#30032"
+msgid "Front right"
+msgstr ""
+
+msgctxt "#30033"
+msgid "Side left"
+msgstr ""
+
+msgctxt "#30034"
+msgid "Side right"
+msgstr ""
+
+msgctxt "#30035"
+msgid "Back left"
+msgstr ""
+
+msgctxt "#30036"
+msgid "Back right"
+msgstr ""
+
+msgctxt "#30037"
+msgid "Front center"
+msgstr ""
+
+msgctxt "#30038"
+msgid "LFE"
+msgstr ""
+
+msgctxt "#30039"
+msgid "Back center"
+msgstr ""
+
+msgctxt "#30049"
+msgid "off"
+msgstr ""
+
+msgctxt "#30050"
+msgid "Pink noise"
+msgstr ""
+
+msgctxt "#30051"
+msgid "Voice"
+msgstr ""
+
+msgctxt "#30052"
+msgid "Front left over center"
+msgstr ""
+
+msgctxt "#30053"
+msgid "Front right over center"
+msgstr ""
+
+msgctxt "#30054"
+msgid "Top front left"
+msgstr ""
+
+msgctxt "#30055"
+msgid "Top front right"
+msgstr ""
+
+msgctxt "#30056"
+msgid "Top front center"
+msgstr ""
+
+msgctxt "#30057"
+msgid "Top center"
+msgstr ""
+
+msgctxt "#30060"
+msgid "Top Back center"
+msgstr ""
+
+msgctxt "#30061"
+msgid "Back left over center"
+msgstr ""
+
+msgctxt "#30062"
+msgid "Back right over center"
+msgstr ""
+
+msgctxt "#30063"
+msgid "Top Back left"
+msgstr ""
+
+msgctxt "#30064"
+msgid "Top Back right"
+msgstr ""
+
+msgctxt "#30065"
+msgid "Continues speaker test"
+msgstr ""
+
+msgctxt "#30066"
+msgid "Meter"
+msgstr ""
+
+msgctxt "#30067"
+msgid "Millimeter"
+msgstr ""
+
+msgctxt "#30068"
+msgid "Feet"
+msgstr ""
+
+msgctxt "#30069"
+msgid "Inches"
+msgstr ""
+
+msgctxt "#30070"
+msgid "Seconds"
+msgstr ""
+
+msgctxt "#30071"
+msgid "Milliseconds"
+msgstr ""
+
+msgctxt "#30072"
+msgid "Speaker distance"
+msgstr ""
+
+msgctxt "#30073"
+msgid "Speaker distance unit"
+msgstr ""
+
+msgctxt "#30074"
+msgid " distance - "
+msgstr ""
+
