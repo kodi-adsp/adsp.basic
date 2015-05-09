@@ -8,13 +8,11 @@ enable_language(CXX)
 
 find_package(kodi REQUIRED)
 find_package(kodiplatform REQUIRED)
-find_package(SampleRate REQUIRED)
-#find_package(FFTW3 REQUIRED)
+find_package(libsamplerate REQUIRED)
 
 include_directories(${kodiplatform_INCLUDE_DIRS}
                     ${KODI_INCLUDE_DIR}
-                    #${FFTW3_INCLUDE_DIRS}
-                    ${SAMPLERATE_INCLUDE_DIRS})
+                    ${LIBSAMPLERATE_INCLUDE_DIRS})
 
 set(BASIC_SOURCES src/AudioDSPBasic.cpp
                   src/GUIDialogSpeakerDistance.cpp
@@ -31,8 +29,7 @@ set(BASIC_SOURCES src/AudioDSPBasic.cpp
                   src/AudioDSPSoundTest.cpp)
 
 set(DEPLIBS ${kodiplatform_LIBRARIES}
-            #${FFTW3_LIBRARIES}
-            ${SAMPLERATE_LIBRARIES})
+            ${LIBSAMPLERATE_LIBRARIES})
 
 build_addon(adsp.basic BASIC DEPLIBS)
 
