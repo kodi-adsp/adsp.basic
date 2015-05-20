@@ -21,7 +21,6 @@
 #include <string>
 #include <vector>
 #include <map>
-#include <samplerate.h>
 
 #include "kodi/kodi_adsp_types.h"
 
@@ -156,17 +155,10 @@ private:
 
   CDelay                           *m_Delay[AE_DSP_CH_MAX];
 
-  bool                              m_UseInputResample;
-  SRC_STATE                        *m_InputResampleStates[AE_DSP_CH_MAX];
   unsigned int                      m_ProcessSamplerate;
   unsigned int                      m_ProcessSamplesize;
   double                            m_ProcessSourceRatio;
 
-  bool                              m_UseOutputResample;
-  SRC_STATE                        *m_OutputResampleStates[AE_DSP_CH_MAX];
-  double                            m_OutputSourceRatio;
-
-  unsigned int                      m_ResampleFaults;
   cDSPProcessorSoundTest           *m_SoundTest;
   std::vector<CDSPProcessMaster*>   m_MasterModes;
   CDSPProcessMaster                *m_MasterCurrrentMode;
