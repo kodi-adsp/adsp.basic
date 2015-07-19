@@ -25,8 +25,8 @@
 
 #include "kodi/kodi_adsp_types.h"
 
-#include "kodi/threads/threads.h"
-#include "kodi/threads/mutex.h"
+#include "platform/threads/threads.h"
+#include "platform/threads/mutex.h"
 #include "filter/delay.h"
 
 #include "DSPProcessMaster.h"

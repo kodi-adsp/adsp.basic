@@ -18,8 +18,8 @@
  */
 
 #include "kodi/libXBMC_addon.h"
-#include "kodi/util/util.h"
-#include "kodi/util/StdString.h"
+#include "platform/util/util.h"
+#include "platform/util/StdString.h"
 
 #include "DSPProcessMaster.h"
 #include "Process_Stereo/DSPProcessStereo.h"
