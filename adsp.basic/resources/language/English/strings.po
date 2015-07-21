@@ -20,7 +20,7 @@ msgstr ""
 #settings labels
 
 msgctxt "#30000"
-msgid "Stereo (Dolby ProLogic II)"
+msgid "Stereo - Dolby ProLogic II"
 msgstr ""
 
 msgctxt "#30001"
@@ -28,11 +28,11 @@ msgid "Input resampler"
 msgstr ""
 
 msgctxt "#30002"
-msgid "Performs a Multichannel 5.1 downmix to Stereo 2.0 in Dolby ProLogic II format"
+msgid "Performs a multichannel 5.1 downmix to stereo 2.0 in Dolby ProLogic II format"
 msgstr ""
 
 msgctxt "#30003"
-msgid "Dolby Pro Logic II is a complementary encoding/decoding system. Although it is similar in design to the standard Dolby Surround system, there are significant improvements in the newer version. In addition to a much-improved steering action leading to more stable imaging, the surround channels are full bandwidth and stereo. This makes the system a 5-2-5 encoding system. It is completely backward compatible with the original Dolby Pro Logic decoder, so any program encoded in Dolby Pro Logic II will play back correctly on a Dolby Surround system.\n\nThe output of the encoder is a stereo signal referred to as Lt/Rt. There is no obvious difference between an Lt/Rt signal encoded as Dolby Surround or Pro Logic II, and the signal can be treated as any conventional stereo signal for storage, transmission and distribution."
+msgid "Dolby Pro Logic II is a complementary encoding / decoding system. Although it is similar in design to the standard Dolby Surround system, there are significant improvements in the newer version. In addition to a much-improved steering action leading to more stable imaging, the surround channels are full bandwidth and stereo. This makes the system a 5-2-5 encoding system. It is completely backward compatible with the original Dolby Pro Logic decoder, so any program encoded in Dolby Pro Logic II will play back correctly on a Dolby Surround system.\n\nThe output of the encoder is a stereo signal referred to as Lt/Rt. There is no obvious difference between an Lt/Rt signal encoded as Dolby Surround or Pro Logic II, and the signal can be treated as any conventional stereo signal for storage, transmission and distribution."
 msgstr ""
 
 msgctxt "#30004"
@@ -52,11 +52,11 @@ msgid "Speaker gain and distance adjustment"
 msgstr ""
 
 msgctxt "#30011"
-msgid "Speaker Gain..."
+msgid "Speaker gain..."
 msgstr ""
 
 msgctxt "#30012"
-msgid "Speaker Distance..."
+msgid "Speaker distance..."
 msgstr ""
 
 msgctxt "#30021"
@@ -140,7 +140,7 @@ msgid "Top center"
 msgstr ""
 
 msgctxt "#30060"
-msgid "Top Back center"
+msgid "Top back center"
 msgstr ""
 
 msgctxt "#30061"
@@ -152,11 +152,11 @@ msgid "Back right over center"
 msgstr ""
 
 msgctxt "#30063"
-msgid "Top Back left"
+msgid "Top back left"
 msgstr ""
 
 msgctxt "#30064"
-msgid "Top Back right"
+msgid "Top back right"
 msgstr ""
 
 msgctxt "#30065"
@@ -168,7 +168,7 @@ msgid "Meter"
 msgstr ""
 
 msgctxt "#30067"
-msgid "Millimeter"
+msgid "Millimeters"
 msgstr ""
 
 msgctxt "#30068"
