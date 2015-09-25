@@ -32,6 +32,10 @@ using namespace ADDON;
 #define snprintf _snprintf
 #endif
 
+#if defined(TARGET_WINDOWS)
+  #undef CreateDirectory
+#endif
+
 int            m_iStreamsPresent  = 0;
 bool           m_bCreated         = false;
 ADDON_STATUS   m_CurStatus        = ADDON_STATUS_UNKNOWN;
@@ -96,6 +100,12 @@ ADDON_STATUS ADDON_Create(void* hdl, void* props)
   m_CurStatus     = ADDON_STATUS_UNKNOWN;
   g_strUserPath   = adspprops->strUserPath;
   g_strAddonPath  = adspprops->strAddonPath;
+  
+  // create addon user path
+  if (!KODI->DirectoryExists(g_strUserPath.c_str()))
+  {
+    KODI->CreateDirectory(g_strUserPath.c_str());
+  }
 
   ADDON_ReadSettings();
 
