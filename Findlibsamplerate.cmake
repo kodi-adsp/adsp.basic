@@ -12,9 +12,8 @@ if(PKG_CONFIG_FOUND)
 endif()
 
 if(NOT LIBSAMPLERATE_FOUND)
-  find_path( LIBSAMPLERATE_INCLUDE_DIRS "samplerate.h"
-             PATH_SUFFIXES "samplerate" )
-  find_library( LIBSAMPLERATE_LIBRARIES samplerate)
+  find_path(LIBSAMPLERATE_INCLUDE_DIRS "samplerate.h" PATH_SUFFIXES "samplerate")
+  find_library(LIBSAMPLERATE_LIBRARIES NAMES samplerate libsamplerate)
 endif()
 
 # handle the QUIETLY and REQUIRED arguments and set SAMPLERATE_FOUND to TRUE if
