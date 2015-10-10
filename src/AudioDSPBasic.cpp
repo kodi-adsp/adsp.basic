@@ -75,10 +75,6 @@ cDSPProcessorStream::cDSPProcessorStream(AE_DSP_STREAM_ID id)
   , m_MasterCurrrentMode(NULL)
 {
   memset(m_Delay, 0, sizeof(m_Delay));
-  memset(m_InputResampleStates, 0, sizeof(m_InputResampleStates));
-  memset(m_OutputResampleStates, 0, sizeof(m_OutputResampleStates));
-  m_UseInputResample = true;
-  m_UseOutputResample = false;
 }
 
 cDSPProcessorStream::~cDSPProcessorStream()
@@ -87,10 +83,6 @@ cDSPProcessorStream::~cDSPProcessorStream()
   {
     if (m_Delay[i] != NULL)
       delete m_Delay[i];
-    if (m_InputResampleStates[i] != NULL)
-      m_InputResampleStates[i] = src_delete(m_InputResampleStates[i]);
-    if (m_OutputResampleStates[i] != NULL)
-      m_OutputResampleStates[i] = src_delete(m_OutputResampleStates[i]);
   }
 }
 
@@ -144,45 +136,8 @@ AE_DSP_ERROR cDSPProcessorStream::StreamCreate(const AE_DSP_SETTINGS *settings, 
     }
   }
 
-  if (m_UseInputResample)
-  {
-    int error;
-    presentFlag = 1;
-    for (int i = 0; i < AE_DSP_CH_MAX; i++)
-    {
-      if (m_Settings.lInChannelPresentFlags & presentFlag && m_InputResampleStates[i] == NULL)
-      {
-        if ((m_InputResampleStates[i] = src_new(SRC_SINC_MEDIUM_QUALITY, 1, &error)) == NULL)
-        {
-          KODI->Log(LOG_ERROR, "Couldn't create resampling converter on channel index %i, resampling disabled!", i);
-          return AE_DSP_ERROR_UNKNOWN;
-        }
-      }
-      presentFlag <<= 1;
-    }
-  }
-
-  if (m_UseOutputResample)
-  {
-    int error;
-    presentFlag = 1;
-    for (int i = 0; i < AE_DSP_CH_MAX; i++)
-    {
-      if (m_Settings.lOutChannelPresentFlags & presentFlag && m_OutputResampleStates[i] == NULL)
-      {
-        if ((m_OutputResampleStates[i] = src_new(SRC_SINC_MEDIUM_QUALITY, 1, &error)) == NULL)
-        {
-          KODI->Log(LOG_ERROR, "Couldn't create resampling converter on channel index %i, resampling disabled!", i);
-          return AE_DSP_ERROR_UNKNOWN;
-        }
-      }
-      presentFlag <<= 1;
-    }
-  }
-
   m_ProcessSamplerate = settings->iOutSamplerate;
   m_ProcessSamplesize = 8192;
-  m_ResampleFaults    = 0;
 
   return err;
 }
@@ -217,11 +172,7 @@ AE_DSP_ERROR cDSPProcessorStream::StreamIsModeSupported(AE_DSP_MODE_TYPE mode_ty
     if (mode_id == ID_POST_PROCESS_SPEAKER_CORRECTION)
       return AE_DSP_ERROR_NO_ERROR;
   }
-  else if (mode_type == AE_DSP_MODE_TYPE_INPUT_RESAMPLE)
-  {
-    if (mode_id == ID_POST_PROCESS_INPUT_RESAMPLER)
-      return AE_DSP_ERROR_NO_ERROR;
-  }
+
   return AE_DSP_ERROR_IGNORE_ME;
 }
 
@@ -242,42 +193,6 @@ AE_DSP_ERROR cDSPProcessorStream::StreamInitialize(const AE_DSP_SETTINGS *settin
   m_Settings.iOutFrames             = settings->iOutFrames;
   m_Settings.iOutSamplerate         = settings->iOutSamplerate;
   m_Settings.bStereoUpmix           = settings->bStereoUpmix;
-
-  if (m_UseInputResample)
-  {
-    m_ProcessSourceRatio = (1.0 * settings->iOutSamplerate) / settings->iInSamplerate;
-    KODI->Log(LOG_INFO, "Using input stream resample ratio of %f", m_ProcessSourceRatio);
-
-    for (int i = 0; i < AE_DSP_CH_MAX; i++)
-    {
-      if (m_InputResampleStates[i] != NULL)
-      {
-        if (src_set_ratio(m_InputResampleStates[i], m_ProcessSourceRatio))
-        {
-          KODI->Log(LOG_ERROR, "Couldn't set sample rate from %i to %i on channel index %i, resampling disabled!", i, settings->iInSamplerate, settings->iOutSamplerate);
-          return AE_DSP_ERROR_UNKNOWN;
-        }
-      }
-    }
-  }
-
-  if (m_UseOutputResample)
-  {
-    m_OutputSourceRatio = (1.0 * settings->iOutSamplerate) / settings->iInSamplerate;
-    KODI->Log(LOG_INFO, "Using resample ratio of %f", m_OutputSourceRatio);
-
-    for (int i = 0; i < AE_DSP_CH_MAX; i++)
-    {
-      if (m_OutputResampleStates[i] != NULL)
-      {
-        if (src_set_ratio(m_OutputResampleStates[i], m_OutputSourceRatio))
-        {
-          KODI->Log(LOG_ERROR, "Couldn't set sample rate from %i to %i on channel index %i, resampling disabled!", i, settings->iInSamplerate, settings->iOutSamplerate);
-          return AE_DSP_ERROR_UNKNOWN;
-        }
-      }
-    }
-  }
 
   if (m_Settings.lOutChannelPresentFlags & AE_DSP_PRSNT_CH_FL)
   {
@@ -401,36 +316,7 @@ float cDSPProcessorStream::InputResampleGetDelay()
 
 unsigned int cDSPProcessorStream::InputResampleProcess(float **array_in, float **array_out, unsigned int samples)
 {
-  int error;
-  SRC_DATA src_data;
-
-  if (m_ResampleFaults > 5)
-    return 0;
-
-  src_data.src_ratio      = m_ProcessSourceRatio;
-  src_data.input_frames   = samples;
-  src_data.output_frames  = m_Settings.iProcessFrames;
-  src_data.end_of_input   = 0;
-
-  int presentFlag = 1;
-  for (int i = 0; i < AE_DSP_CH_MAX; i++)
-  {
-    if (m_Settings.lInChannelPresentFlags & presentFlag)
-    {
-      src_data.data_in  = array_in[i];
-      src_data.data_out = array_out[i];
-
-      if ((error = src_process(m_InputResampleStates[i], &src_data)))
-      {
-        KODI->Log(LOG_ERROR, "Resample process on index %i with %s failed", i, src_strerror(error)) ;
-        m_ResampleFaults++;
-        return 0;
-      }
-    }
-    presentFlag <<= 1;
-  }
-
-  return src_data.output_frames_gen;
+  return CopyInToOut(array_in, array_out, samples);
 }
 
 /*!
@@ -769,7 +655,7 @@ bool cDSPProcessor::SupportsInputProcess() const
 
 bool cDSPProcessor::SupportsInputResample() const
 {
-  return true;
+  return false;
 }
 
 bool cDSPProcessor::SupportsPreProcess() const
@@ -856,21 +742,6 @@ bool cDSPProcessor::InitDSP()
   EnableMasterProcessor(ID_MASTER_PROCESS_STEREO_DOWNMIX, enable);
 
   struct AE_DSP_MODES::AE_DSP_MODE modeInfoStruct;
-  modeInfoStruct.iModeType              = AE_DSP_MODE_TYPE_INPUT_RESAMPLE;
-  modeInfoStruct.iUniqueDBModeId        = -1;         // set by RegisterMode
-  modeInfoStruct.iModeNumber            = ID_POST_PROCESS_INPUT_RESAMPLER;
-  modeInfoStruct.bHasSettingsDialog     = false;
-  modeInfoStruct.iModeDescription       = -1;
-  modeInfoStruct.iModeHelp              = -1;
-  modeInfoStruct.iModeName              = 30001;
-  modeInfoStruct.iModeSetupName         = 30001;
-  modeInfoStruct.iModeSupportTypeFlags  = AE_DSP_PRSNT_ASTREAM_BASIC | AE_DSP_PRSNT_ASTREAM_MUSIC | AE_DSP_PRSNT_ASTREAM_MOVIE;
-  strncpy(modeInfoStruct.strModeName, "Input resampler", sizeof(modeInfoStruct.strModeName) - 1);
-  memset(modeInfoStruct.strOwnModeImage, 0, sizeof(modeInfoStruct.strOwnModeImage)); // unused
-  memset(modeInfoStruct.strOverrideModeImage, 0, sizeof(modeInfoStruct.strOverrideModeImage)); // unused
-
-  ADSP->RegisterMode(&modeInfoStruct);
-
   modeInfoStruct.iModeType              = AE_DSP_MODE_TYPE_POST_PROCESS;
   modeInfoStruct.iUniqueDBModeId        = -1;         // set by RegisterMode
   modeInfoStruct.iModeNumber            = ID_POST_PROCESS_SPEAKER_CORRECTION;
