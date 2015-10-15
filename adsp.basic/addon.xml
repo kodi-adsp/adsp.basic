@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
 	id="adsp.basic"
-	version="0.1.0"
+	version="0.2.0"
 	name="Audio DSP Basic Processor"
 	provider-name="Team KODI">
 	<requires>
 		<c-pluff version="0.1"/>
-		<import addon="kodi.adsp" version="0.0.1"/>
+		<import addon="kodi.adsp" version="0.1.8"/>
 	</requires>
 	<extension
 		point="kodi.adsp"
