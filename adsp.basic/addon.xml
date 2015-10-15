@@ -18,7 +18,7 @@
 	<extension point="kodi.addon.metadata">
 		<summary lang="en">Basic audio DSP processor</summary>
 		<description lang="en">
-This add-on contains basic dsp related parts to handle speaker delays, channel related volume amplification and as test example a input resample handling.
+This add-on contains basic dsp related parts to handle speaker delays, channel related volume amplification.
 
 As mode it support a Dolby Pro Logic II compatible multichannel downmix to stereo, which becomes available if only 2 channel output on Kodi is selected.</description>
 		<disclaimer lang="en">This addon is still in development to increase amount of features, e.g. speaker position changes.</disclaimer>

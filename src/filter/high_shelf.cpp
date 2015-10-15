@@ -15,8 +15,8 @@
 #define Q_SCALE             32.0
 
 #if !defined(M_PI) && defined(TARGET_WINDOWS)
-	#define _USE_MATH_DEFINES 
-	#include <cmath>
+  #define _USE_MATH_DEFINES 
+  #include <cmath>
 #endif
 
 chighShelf::chighShelf(unsigned long Sample_Rate, unsigned long freq, float gain_, float pitch, float reso, float reso_gain) {

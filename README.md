@@ -7,7 +7,7 @@
 -------------
 
 -------------
-This add-on contains basic dsp related parts to handle speaker delays, channel related volume amplification and as test example a input resample handling.
+This add-on contains basic dsp related parts to handle speaker delays, channel related volume amplification.
 
 As mode it support a Dolby Pro Logic II compatible multichannel downmix to stereo, which becomes available if only 2 channel output on Kodi is selected.</description>
 
