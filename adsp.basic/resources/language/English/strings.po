@@ -23,9 +23,7 @@ msgctxt "#30000"
 msgid "Stereo - Dolby ProLogic II"
 msgstr ""
 
-msgctxt "#30001"
-msgid "Input resampler"
-msgstr ""
+# empty string 30001
 
 msgctxt "#30002"
 msgid "Performs a multichannel 5.1 downmix to stereo 2.0 in Dolby ProLogic II format"
