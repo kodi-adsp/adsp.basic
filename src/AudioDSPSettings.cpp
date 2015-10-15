@@ -33,7 +33,7 @@ using namespace ADDON;
 
 CDSPSettings::CDSPSettings()
 {
-  for (int i = 0; i < MAX_CHANNEL; i++)
+  for (int i = 0; i < MAX_CHANNEL; ++i)
   {
     m_Settings.m_channels[i].iChannelNumber = -1;
     m_Settings.m_channels[i].iVolumeCorrection = 0;
@@ -183,7 +183,7 @@ bool CDSPSettings::SaveSettingsData()
   TiXmlNode* pChannelsNode = pRoot->InsertEndChild(xmlChannelsSetting);
   if (pChannelsNode)
   {
-    for (int i = 0; i < AE_DSP_CH_MAX; i++)
+    for (int i = 0; i < AE_DSP_CH_MAX; ++i)
     {
       TiXmlElement xmlSetting("channel");
       TiXmlNode* pChannelNode = pChannelsNode->InsertEndChild(xmlSetting);
