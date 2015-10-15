@@ -92,9 +92,9 @@ public:
    * Pre processing related functions
    * all enabled addons allowed todo this
    */
-  unsigned int PreProcessNeededSamplesize(unsigned int modeId);
-  float        PreProcessGetDelay(unsigned int modeId);
-  unsigned int PreProcess(unsigned int modeId, float **array_in, float **array_out, unsigned int samples);
+  unsigned int PreProcessNeededSamplesize();
+  float        PreProcessGetDelay();
+  unsigned int PreProcess(float **array_in, float **array_out, unsigned int samples);
 
   /*!
    * Master processing functions
@@ -184,15 +184,13 @@ public:
   void DestroyDSP();
   ADDON_STATUS SetSetting(const char *settingName, const void *settingValue);
   AE_DSP_ERROR CallMenuHook(const AE_DSP_MENUHOOK &menuhook, const AE_DSP_MENUHOOK_DATA &item);
-  AE_DSP_ERROR StreamCreate(const AE_DSP_SETTINGS *addonSettings, const AE_DSP_STREAM_PROPERTIES* pProperties, ADDON_HANDLE handle);
-  AE_DSP_ERROR StreamDestroy(unsigned int id);
   void SetOutputGain(AE_DSP_CHANNEL channel, float GainCoeff);
   void SetDelay(AE_DSP_CHANNEL channel, unsigned int delay);
   void SetTestSound(AE_DSP_CHANNEL channel, int mode, CGUIDialogSpeakerGain *cbClass = NULL, bool continues = false);
   CDSPProcessMaster *GetProcessMaster(unsigned streamId);
 
-  unsigned long GetOutChannelPresentFlags(unsigned int streamId = -1);
-  int GetMasterModeStreamType(unsigned int streamId);
+  void SetOutChannelPresentFlags(unsigned long flags) { m_outChannelPresentFlags = flags; }
+  unsigned long GetOutChannelPresentFlags() { return m_outChannelPresentFlags; }
 
 protected:
   friend class cDSPProcessorStream;
@@ -209,7 +207,7 @@ protected:
   unsigned int             m_SpeakerDelay[AE_DSP_CH_MAX];
   unsigned int             m_SpeakerDelayMax;
   bool                     m_SpeakerCorrection;
-  unsigned int             m_lastStreamId;
+  unsigned long            m_outChannelPresentFlags;
 
   PLATFORM::CMutex         m_Mutex;
 };

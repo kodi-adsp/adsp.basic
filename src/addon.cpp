@@ -100,7 +100,7 @@ ADDON_STATUS ADDON_Create(void* hdl, void* props)
   m_CurStatus     = ADDON_STATUS_UNKNOWN;
   g_strUserPath   = adspprops->strUserPath;
   g_strAddonPath  = adspprops->strAddonPath;
-  
+
   // create addon user path
   if (!KODI->DirectoryExists(g_strUserPath.c_str()))
   {
@@ -223,35 +223,42 @@ AE_DSP_ERROR CallMenuHook(const AE_DSP_MENUHOOK &menuhook, const AE_DSP_MENUHOOK
 
 AE_DSP_ERROR StreamCreate(const AE_DSP_SETTINGS *addonSettings, const AE_DSP_STREAM_PROPERTIES* pProperties, ADDON_HANDLE handle)
 {
-  return g_DSPProcessor.StreamCreate(addonSettings, pProperties, handle);
+  if (g_usedDSPs[addonSettings->iStreamID])
+  {
+    delete g_usedDSPs[addonSettings->iStreamID];
+    g_usedDSPs[addonSettings->iStreamID] = NULL;
+  }
+
+  cDSPProcessorStream *proc = new cDSPProcessorStream(addonSettings->iStreamID);
+  AE_DSP_ERROR err = proc->StreamCreate(addonSettings, pProperties);
+  if (err == AE_DSP_ERROR_NO_ERROR)
+  {
+    g_usedDSPs[addonSettings->iStreamID] = proc;
+    handle->dataIdentifier = addonSettings->iStreamID;
+    handle->callerAddress = proc;
+  }
+  else
+    delete proc;
+
+  return err;
 }
 
 AE_DSP_ERROR StreamDestroy(const ADDON_HANDLE handle)
 {
-  return g_DSPProcessor.StreamDestroy(handle->dataIdentifier);
+  AE_DSP_ERROR err = ((cDSPProcessorStream*)handle->callerAddress)->StreamDestroy();
+  delete ((cDSPProcessorStream*)handle->callerAddress);
+  g_usedDSPs[handle->dataIdentifier] = NULL;
+  return err;
 }
 
 AE_DSP_ERROR StreamInitialize(const ADDON_HANDLE handle, const AE_DSP_SETTINGS *settings)
 {
-  AE_DSP_ERROR err = AE_DSP_ERROR_UNKNOWN;
-
-  if (g_usedDSPs[handle->dataIdentifier])
-    err = g_usedDSPs[handle->dataIdentifier]->StreamInitialize(settings);
-
-  return err;
+  return ((cDSPProcessorStream*)handle->callerAddress)->StreamInitialize(settings);
 }
 
 AE_DSP_ERROR StreamIsModeSupported(const ADDON_HANDLE handle, AE_DSP_MODE_TYPE type, unsigned int mode_id, int unique_db_mode_id)
 {
-  AE_DSP_ERROR err = AE_DSP_ERROR_UNKNOWN;
-
-  if (type == AE_DSP_MODE_TYPE_INPUT_RESAMPLE && mode_id == ID_POST_PROCESS_INPUT_RESAMPLER)
-    return AE_DSP_ERROR_NO_ERROR;
-
-  if (g_usedDSPs[handle->dataIdentifier])
-    err = g_usedDSPs[handle->dataIdentifier]->StreamIsModeSupported(type, mode_id, unique_db_mode_id);
-
-  return err;
+  return ((cDSPProcessorStream*)handle->callerAddress)->StreamIsModeSupported(type, mode_id, unique_db_mode_id);
 }
 
 
@@ -261,7 +268,7 @@ AE_DSP_ERROR StreamIsModeSupported(const ADDON_HANDLE handle, AE_DSP_MODE_TYPE t
 
 bool InputProcess(const ADDON_HANDLE handle, const float **array_in, unsigned int samples)
 {
-  return g_usedDSPs[handle->dataIdentifier]->InputProcess(array_in, samples);
+  return ((cDSPProcessorStream*)handle->callerAddress)->InputProcess(array_in, samples);
 }
 
 
@@ -272,22 +279,22 @@ bool InputProcess(const ADDON_HANDLE handle, const float **array_in, unsigned in
 
 unsigned int InputResampleProcessNeededSamplesize(const ADDON_HANDLE handle)
 {
-  return g_usedDSPs[handle->dataIdentifier]->InputResampleProcessNeededSamplesize();
+  return ((cDSPProcessorStream*)handle->callerAddress)->InputResampleProcessNeededSamplesize();
 }
 
 int InputResampleSampleRate(const ADDON_HANDLE handle)
 {
-  return g_usedDSPs[handle->dataIdentifier]->InputResampleSampleRate();
+  return ((cDSPProcessorStream*)handle->callerAddress)->InputResampleSampleRate();
 }
 
 float InputResampleGetDelay(const ADDON_HANDLE handle)
 {
-  return g_usedDSPs[handle->dataIdentifier]->InputResampleGetDelay();
+  return ((cDSPProcessorStream*)handle->callerAddress)->InputResampleGetDelay();
 }
 
 unsigned int InputResampleProcess(const ADDON_HANDLE handle, float **array_in, float **array_out, unsigned int samples)
 {
-  return g_usedDSPs[handle->dataIdentifier]->InputResampleProcess(array_in,  array_out, samples);
+  return ((cDSPProcessorStream*)handle->callerAddress)->InputResampleProcess(array_in, array_out, samples);
 }
 
 
@@ -298,17 +305,17 @@ unsigned int InputResampleProcess(const ADDON_HANDLE handle, float **array_in, f
 
 unsigned int PreProcessNeededSamplesize(const ADDON_HANDLE handle, unsigned int mode_id)
 {
-  return g_usedDSPs[handle->dataIdentifier]->PreProcessNeededSamplesize(mode_id);
+  return ((cDSPProcessorStream*)handle->callerAddress)->PreProcessNeededSamplesize();
 }
 
 float PreProcessGetDelay(const ADDON_HANDLE handle, unsigned int mode_id)
 {
-  return g_usedDSPs[handle->dataIdentifier]->PreProcessGetDelay(mode_id);
+  return ((cDSPProcessorStream*)handle->callerAddress)->PreProcessGetDelay();
 }
 
 unsigned int PreProcess(const ADDON_HANDLE handle, unsigned int mode_id, float **array_in, float **array_out, unsigned int samples)
 {
-  return g_usedDSPs[handle->dataIdentifier]->PreProcess(mode_id, array_in,  array_out, samples);
+  return ((cDSPProcessorStream*)handle->callerAddress)->PreProcess(array_in, array_out, samples);
 }
 
 /*!
@@ -318,32 +325,32 @@ unsigned int PreProcess(const ADDON_HANDLE handle, unsigned int mode_id, float *
 
 AE_DSP_ERROR MasterProcessSetMode(const ADDON_HANDLE handle, AE_DSP_STREAMTYPE type, unsigned int client_mode_id, int unique_db_mode_id)
 {
-  return g_usedDSPs[handle->dataIdentifier]->MasterProcessSetMode(type, client_mode_id, unique_db_mode_id);
+  return ((cDSPProcessorStream*)handle->callerAddress)->MasterProcessSetMode(type, client_mode_id, unique_db_mode_id);
 }
 
 unsigned int MasterProcessNeededSamplesize(const ADDON_HANDLE handle)
 {
-  return g_usedDSPs[handle->dataIdentifier]->MasterProcessNeededSamplesize();
+  return ((cDSPProcessorStream*)handle->callerAddress)->MasterProcessNeededSamplesize();
 }
 
 float MasterProcessGetDelay(const ADDON_HANDLE handle)
 {
-  return g_usedDSPs[handle->dataIdentifier]->MasterProcessGetDelay();
+  return ((cDSPProcessorStream*)handle->callerAddress)->MasterProcessGetDelay();
 }
 
 unsigned int MasterProcess(const ADDON_HANDLE handle, float **array_in, float **array_out, unsigned int samples)
 {
-  return g_usedDSPs[handle->dataIdentifier]->MasterProcess(array_in, array_out, samples);
+  return ((cDSPProcessorStream*)handle->callerAddress)->MasterProcess(array_in, array_out, samples);
 }
 
 int MasterProcessGetOutChannels(const ADDON_HANDLE handle, unsigned long &out_channel_present_flags)
 {
-  return g_usedDSPs[handle->dataIdentifier]->MasterProcessGetOutChannels(out_channel_present_flags);
+  return ((cDSPProcessorStream*)handle->callerAddress)->MasterProcessGetOutChannels(out_channel_present_flags);
 }
 
 const char *MasterProcessGetStreamInfoString(const ADDON_HANDLE handle)
 {
-  return g_usedDSPs[handle->dataIdentifier]->MasterProcessGetStreamInfoString();
+  return ((cDSPProcessorStream*)handle->callerAddress)->MasterProcessGetStreamInfoString();
 }
 
 
@@ -354,17 +361,17 @@ const char *MasterProcessGetStreamInfoString(const ADDON_HANDLE handle)
 
 unsigned int PostProcessNeededSamplesize(const ADDON_HANDLE handle, unsigned int mode_id)
 {
-  return g_usedDSPs[handle->dataIdentifier]->PostProcessNeededSamplesize(mode_id);
+  return ((cDSPProcessorStream*)handle->callerAddress)->PostProcessNeededSamplesize(mode_id);
 }
 
 float PostProcessGetDelay(const ADDON_HANDLE handle, unsigned int mode_id)
 {
-  return g_usedDSPs[handle->dataIdentifier]->PostProcessGetDelay(mode_id);
+  return ((cDSPProcessorStream*)handle->callerAddress)->PostProcessGetDelay(mode_id);
 }
 
 unsigned int PostProcess(const ADDON_HANDLE handle, unsigned int mode_id, float **array_in, float **array_out, unsigned int samples)
 {
-  return g_usedDSPs[handle->dataIdentifier]->PostProcess(mode_id, array_in, array_out, samples);
+  return ((cDSPProcessorStream*)handle->callerAddress)->PostProcess(mode_id, array_in, array_out, samples);
 }
 
 
@@ -375,22 +382,22 @@ unsigned int PostProcess(const ADDON_HANDLE handle, unsigned int mode_id, float 
 
 unsigned int OutputResampleProcessNeededSamplesize(const ADDON_HANDLE handle)
 {
-  return g_usedDSPs[handle->dataIdentifier]->OutputResampleProcessNeededSamplesize();
+  return ((cDSPProcessorStream*)handle->callerAddress)->OutputResampleProcessNeededSamplesize();
 }
 
 int OutputResampleSampleRate(const ADDON_HANDLE handle)
 {
-  return g_usedDSPs[handle->dataIdentifier]->OutputResampleSampleRate();
+  return ((cDSPProcessorStream*)handle->callerAddress)->OutputResampleSampleRate();
 }
 
 float OutputResampleGetDelay(const ADDON_HANDLE handle)
 {
-  return g_usedDSPs[handle->dataIdentifier]->OutputResampleGetDelay();
+  return ((cDSPProcessorStream*)handle->callerAddress)->OutputResampleGetDelay();
 }
 
 unsigned int OutputResampleProcess(const ADDON_HANDLE handle, float **array_in, float **array_out, unsigned int samples)
 {
-  return g_usedDSPs[handle->dataIdentifier]->OutputResampleProcess(array_in,  array_out, samples);
+  return ((cDSPProcessorStream*)handle->callerAddress)->OutputResampleProcess(array_in,  array_out, samples);
 }
 
 }

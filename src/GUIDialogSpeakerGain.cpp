@@ -117,7 +117,7 @@ void CGUIDialogSpeakerGain::SetVolumeSpin(int id, AE_DSP_CHANNEL channel, bool p
   if (present)
   {
     CStdString label;
-    for (int i = SPEAKER_GAIN_RANGE_DB_MIN; i <= SPEAKER_GAIN_RANGE_DB_MAX; i++)
+    for (int i = SPEAKER_GAIN_RANGE_DB_MIN; i <= SPEAKER_GAIN_RANGE_DB_MAX; ++i)
     {
       label.Format("%+i dB", i);
       m_Settings.m_channels[channel].ptrSpinControl->AddLabel(label.c_str(), i);
@@ -130,7 +130,7 @@ void CGUIDialogSpeakerGain::SetVolumeSpin(int id, AE_DSP_CHANNEL channel, bool p
 
 void CGUIDialogSpeakerGain::SetVolumeSpins()
 {
-  unsigned long presentFlags = g_DSPProcessor.GetOutChannelPresentFlags(m_StreamId);
+  unsigned long presentFlags = g_DSPProcessor.GetOutChannelPresentFlags();
   SetVolumeSpin(SPIN_CONTROL_SPEAKER_CH_FL,   AE_DSP_CH_FL,   presentFlags & AE_DSP_PRSNT_CH_FL);
   SetVolumeSpin(SPIN_CONTROL_SPEAKER_CH_FR,   AE_DSP_CH_FR,   presentFlags & AE_DSP_PRSNT_CH_FR);
   SetVolumeSpin(SPIN_CONTROL_SPEAKER_CH_FC,   AE_DSP_CH_FC,   presentFlags & AE_DSP_PRSNT_CH_FC);
@@ -210,7 +210,7 @@ bool CGUIDialogSpeakerGain::OnClick(int controlId)
         m_window->Close();
         GUI->Control_releaseSpin(m_spinSpeakerGainTest);
         GUI->Control_releaseRadioButton(m_radioSpeakerContinuesTest);
-        for (int i = 0; i < AE_DSP_CH_MAX; i++)
+        for (int i = 0; i < AE_DSP_CH_MAX; ++i)
         {
           if (m_Settings.m_channels[i].ptrSpinControl)
           {
@@ -227,7 +227,7 @@ bool CGUIDialogSpeakerGain::OnClick(int controlId)
         m_window->Close();
         GUI->Control_releaseSpin(m_spinSpeakerGainTest);
         GUI->Control_releaseRadioButton(m_radioSpeakerContinuesTest);
-        for (int i = 0; i < AE_DSP_CH_MAX; i++)
+        for (int i = 0; i < AE_DSP_CH_MAX; ++i)
         {
           if (m_Settings.m_channels[i].ptrSpinControl)
           {

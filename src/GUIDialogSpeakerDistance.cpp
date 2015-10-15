@@ -144,7 +144,7 @@ void CGUIDialogSpeakerDistance::SetDistanceSpin(int id, AE_DSP_CHANNEL channel, 
 
 void CGUIDialogSpeakerDistance::SetDistanceSpins(int Format)
 {
-  unsigned long presentFlags = g_DSPProcessor.GetOutChannelPresentFlags(m_StreamId);
+  unsigned long presentFlags = g_DSPProcessor.GetOutChannelPresentFlags();
   SetDistanceSpin(SPIN_CONTROL_SPEAKER_CH_FL,   AE_DSP_CH_FL,   Format, presentFlags & AE_DSP_PRSNT_CH_FL);
   SetDistanceSpin(SPIN_CONTROL_SPEAKER_CH_FR,   AE_DSP_CH_FR,   Format, presentFlags & AE_DSP_PRSNT_CH_FR);
   SetDistanceSpin(SPIN_CONTROL_SPEAKER_CH_FC,   AE_DSP_CH_FC,   Format, presentFlags & AE_DSP_PRSNT_CH_FC);
@@ -208,7 +208,7 @@ bool CGUIDialogSpeakerDistance::OnClick(int controlId)
       {
         m_window->Close();
         GUI->Control_releaseSpin(m_spinSpeakerDistanceUnit);
-        for (int i = 0; i < AE_DSP_CH_MAX; i++)
+        for (int i = 0; i < AE_DSP_CH_MAX; ++i)
         {
           if (m_Settings.m_channels[i].ptrSpinControl)
           {
@@ -223,7 +223,7 @@ bool CGUIDialogSpeakerDistance::OnClick(int controlId)
       {
         m_window->Close();
         GUI->Control_releaseSpin(m_spinSpeakerDistanceUnit);
-        for (int i = 0; i < AE_DSP_CH_MAX; i++)
+        for (int i = 0; i < AE_DSP_CH_MAX; ++i)
         {
           if (m_Settings.m_channels[i].ptrSpinControl)
           {

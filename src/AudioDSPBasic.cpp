@@ -79,7 +79,9 @@ cDSPProcessorStream::cDSPProcessorStream(AE_DSP_STREAM_ID id)
 
 cDSPProcessorStream::~cDSPProcessorStream()
 {
-  for (int i = 0; i < AE_DSP_CH_MAX; i++)
+  StreamDestroy();
+
+  for (int i = 0; i < AE_DSP_CH_MAX; ++i)
   {
     if (m_Delay[i] != NULL)
       delete m_Delay[i];
@@ -120,6 +122,8 @@ AE_DSP_ERROR cDSPProcessorStream::StreamCreate(const AE_DSP_SETTINGS *settings, 
   m_Settings.iOutSamplerate         = settings->iOutSamplerate;
   m_Settings.bStereoUpmix           = settings->bStereoUpmix;
 
+  g_DSPProcessor.SetOutChannelPresentFlags(settings->lOutChannelPresentFlags);
+
   for (masterModesMap::iterator it = g_DSPProcessor.m_MasterModesMap.begin(); it != g_DSPProcessor.m_MasterModesMap.end(); it++)
   {
     if (it->second->IsSupported(settings, pProperties))
@@ -147,12 +151,16 @@ AE_DSP_ERROR cDSPProcessorStream::StreamDestroy()
   if (m_MasterCurrrentMode)
     m_MasterCurrrentMode->Deinitialize();
   m_MasterCurrrentMode = NULL;
-  for (unsigned int i = 0; i < m_MasterModes.size(); i++)
+  for (unsigned int i = 0; i < m_MasterModes.size(); ++i)
   {
     if (m_MasterModes[i]->GetStreamId() > 0)
       delete m_MasterModes[i];
   }
   m_MasterModes.clear();
+
+  if (m_SoundTest)
+    delete m_SoundTest;
+
   return AE_DSP_ERROR_NO_ERROR;
 }
 
@@ -160,7 +168,7 @@ AE_DSP_ERROR cDSPProcessorStream::StreamIsModeSupported(AE_DSP_MODE_TYPE mode_ty
 {
   (void) unique_db_mode_id;
 
-  for (unsigned int i = 0; i < m_MasterModes.size(); i++)
+  for (unsigned int i = 0; i < m_MasterModes.size(); ++i)
   {
     if (m_MasterModes[i]->m_ModeInfoStruct.iModeType == mode_type &&
         m_MasterModes[i]->m_ModeInfoStruct.iModeNumber == mode_id)
@@ -288,8 +296,6 @@ AE_DSP_ERROR cDSPProcessorStream::StreamInitialize(const AE_DSP_SETTINGS *settin
 
 bool cDSPProcessorStream::InputProcess(const float **array_in, unsigned int samples)
 {
-  (void) array_in;
-  (void) samples;   // Remove compiler warning
   return true;
 }
 
@@ -324,23 +330,19 @@ unsigned int cDSPProcessorStream::InputResampleProcess(float **array_in, float *
  * all enabled addons allowed todo this
  */
 
-unsigned int cDSPProcessorStream::PreProcessNeededSamplesize(unsigned int mode_id)
+unsigned int cDSPProcessorStream::PreProcessNeededSamplesize()
 {
-  (void) mode_id;
   return 0;
 }
 
-float cDSPProcessorStream::PreProcessGetDelay(unsigned int mode_id)
+float cDSPProcessorStream::PreProcessGetDelay()
 {
-  (void) mode_id;
   return 0.0f;
 }
 
-unsigned int cDSPProcessorStream::PreProcess(unsigned int mode_id, float **array_in, float **array_out, unsigned int samples)
+unsigned int cDSPProcessorStream::PreProcess(float **array_in, float **array_out, unsigned int samples)
 {
-  (void) mode_id;
-  samples = CopyInToOut(array_in, array_out, samples);
-  return samples;
+  return CopyInToOut(array_in, array_out, samples);
 }
 
 /*!
@@ -350,10 +352,7 @@ unsigned int cDSPProcessorStream::PreProcess(unsigned int mode_id, float **array
 
 AE_DSP_ERROR cDSPProcessorStream::MasterProcessSetMode(AE_DSP_STREAMTYPE type, unsigned int mode_id, int unique_db_mode_id)
 {
-  (void) type;
-  (void) unique_db_mode_id;   // Remove compiler warning
-
-  for (unsigned int i = 0; i < m_MasterModes.size(); i++)
+  for (unsigned int i = 0; i < m_MasterModes.size(); ++i)
   {
     if (m_MasterModes[i] != NULL && m_MasterModes[i]->GetId() == mode_id)
     {
@@ -396,7 +395,7 @@ unsigned int cDSPProcessorStream::MasterProcess(float **array_in, float **array_
 unsigned int cDSPProcessorStream::CopyInToOut(float **array_in, float **array_out, unsigned int samples)
 {
   int presentFlag = 1;
-  for (int i = 0; i < AE_DSP_CH_MAX; i++)
+  for (int i = 0; i < AE_DSP_CH_MAX; ++i)
   {
     if (m_Settings.lOutChannelPresentFlags & presentFlag)
       memcpy(array_out[i], array_in[i], samples*sizeof(float));
@@ -414,9 +413,11 @@ int cDSPProcessorStream::MasterProcessGetOutChannels(unsigned long &out_channel_
 
 const char *cDSPProcessorStream::MasterProcessGetStreamInfoString()
 {
-  static CStdString strStreamInfoString = "";
+  static std::string strStreamInfoString;
   if (m_MasterCurrrentMode)
     strStreamInfoString = m_MasterCurrrentMode->GetStreamInfoString();
+  else
+    strStreamInfoString = "";
   return strStreamInfoString.c_str();
 }
 
@@ -428,14 +429,11 @@ const char *cDSPProcessorStream::MasterProcessGetStreamInfoString()
 
 unsigned int cDSPProcessorStream::PostProcessNeededSamplesize(unsigned int modeId)
 {
-  (void) modeId;
   return 0;
 }
 
 float cDSPProcessorStream::PostProcessGetDelay(unsigned int modeId)
 {
-  (void) modeId;
-
   CLockObject lock(g_DSPProcessor.m_Mutex);
 
   float delay = 0.0;
@@ -468,16 +466,9 @@ unsigned int cDSPProcessorStream::PostProcess(unsigned int modeId, float **array
   if (modeId == ID_POST_PROCESS_SPEAKER_CORRECTION)
   {
     if (m_SoundTest)
-    {
-      if (m_StreamID == 0)
-        return m_SoundTest->ProcessTestMode(array_in, array_out, samples);
-      else
-        return 0;
-    }
+      return m_SoundTest->ProcessTestMode(array_in, array_out, samples);
     else
-    {
       samples = CopyInToOut(array_in, array_out, samples);
-    }
 
     CLockObject lock(g_DSPProcessor.m_Mutex);
 
@@ -635,13 +626,14 @@ unsigned int cDSPProcessorStream::OutputResampleProcess(float **array_in, float 
 
 cDSPProcessor g_DSPProcessor;
 
-cDSPProcessor::cDSPProcessor()
+cDSPProcessor::cDSPProcessor() :
+  m_outChannelPresentFlags(0)
 {
 }
 
 cDSPProcessor::~cDSPProcessor()
 {
-  for (masterModesMap::iterator it = m_MasterModesMap.begin(); it != m_MasterModesMap.end(); it++)
+  for (masterModesMap::iterator it = m_MasterModesMap.begin(); it != m_MasterModesMap.end(); ++it)
   {
     delete it->second;
   }
@@ -680,7 +672,7 @@ bool cDSPProcessor::SupportsPostProcess() const
 
 bool cDSPProcessor::InitDSP()
 {
-  for (int i = 0; i < AE_DSP_STREAM_MAX_STREAMS; i++)
+  for (int i = 0; i < AE_DSP_STREAM_MAX_STREAMS; ++i)
     g_usedDSPs[i] = NULL;
 
   /*!
@@ -688,7 +680,7 @@ bool cDSPProcessor::InitDSP()
    */
   SetOutputGain(AE_DSP_CH_MAX, 0.0);
 
-  for (int i = 0; i < AE_DSP_CH_MAX; i++)
+  for (int i = 0; i < AE_DSP_CH_MAX; ++i)
     m_SpeakerDelay[i] = 0;
 
   m_SpeakerCorrection = false;
@@ -696,7 +688,7 @@ bool cDSPProcessor::InitDSP()
   CDSPSettings settings;
   settings.LoadSettingsData(-1, true);
 
-  for (int i = 0; i < AE_DSP_CH_MAX; i++)
+  for (int i = 0; i < AE_DSP_CH_MAX; ++i)
   {
     SetOutputGain((AE_DSP_CHANNEL) i, settings.m_Settings.m_channels[i].iVolumeCorrection);
 
@@ -757,55 +749,17 @@ bool cDSPProcessor::InitDSP()
 
   ADSP->RegisterMode(&modeInfoStruct);
 
-  m_lastStreamId = 0;
-
   return true;
 }
 
 void cDSPProcessor::DestroyDSP()
 {
-  for (int i = 0; i < AE_DSP_STREAM_MAX_STREAMS; i++)
+  for (int i = 0; i < AE_DSP_STREAM_MAX_STREAMS; ++i)
     SAFE_DELETE(g_usedDSPs[i]);
 
   for (masterModesMap::iterator it = m_MasterModesMap.begin(); it != m_MasterModesMap.end(); it++)
     delete it->second;
   m_MasterModesMap.clear();
-
-}
-
-AE_DSP_ERROR cDSPProcessor::StreamCreate(const AE_DSP_SETTINGS *addonSettings, const AE_DSP_STREAM_PROPERTIES* pProperties, ADDON_HANDLE handle)
-{
-  if (g_usedDSPs[addonSettings->iStreamID])
-  {
-    delete g_usedDSPs[addonSettings->iStreamID];
-    g_usedDSPs[addonSettings->iStreamID] = NULL;
-  }
-
-  cDSPProcessorStream *proc = new cDSPProcessorStream(addonSettings->iStreamID);
-  AE_DSP_ERROR err = proc->StreamCreate(addonSettings, pProperties);
-  if (err == AE_DSP_ERROR_NO_ERROR)
-  {
-    g_usedDSPs[addonSettings->iStreamID] = proc;
-    handle->dataIdentifier = addonSettings->iStreamID;
-    handle->callerAddress = proc;
-    m_lastStreamId = addonSettings->iStreamID;
-  }
-  else
-    delete proc;
-
-  return err;
-}
-
-AE_DSP_ERROR cDSPProcessor::StreamDestroy(AE_DSP_STREAM_ID id)
-{
-  AE_DSP_ERROR err = AE_DSP_ERROR_UNKNOWN;
-  if (g_usedDSPs[id])
-  {
-    err = g_usedDSPs[id]->StreamDestroy();
-    delete g_usedDSPs[id];
-    g_usedDSPs[id] = NULL;
-  }
-  return err;
 }
 
 bool cDSPProcessor::IsMasterProcessorEnabled(unsigned int masterId)
@@ -914,7 +868,7 @@ void cDSPProcessor::SetOutputGain(AE_DSP_CHANNEL channel, float GainCoeff)
 
   if (channel == AE_DSP_CH_MAX)
   {
-    for (unsigned i = 0; i < AE_DSP_CH_MAX; i++)
+    for (unsigned i = 0; i < AE_DSP_CH_MAX; ++i)
       g_DSPProcessor.m_OutputGain[i] = GainCoeff;
   }
   else if (channel < AE_DSP_CH_MAX && channel > AE_DSP_CH_INVALID)
@@ -932,14 +886,14 @@ void cDSPProcessor::SetDelay(AE_DSP_CHANNEL channel, unsigned int delay)
   else
   {
     m_SpeakerDelayMax = 0;
-    for (int i = 0; i < AE_DSP_CH_MAX; i++)
+    for (int i = 0; i < AE_DSP_CH_MAX; ++i)
     {
       if (m_SpeakerDelay[i] > m_SpeakerDelayMax)
         m_SpeakerDelayMax = m_SpeakerDelay[i];
     }
   }
 
-  for (int i = 0; i < AE_DSP_STREAM_MAX_STREAMS; i++)
+  for (int i = 0; i < AE_DSP_STREAM_MAX_STREAMS; ++i)
   {
     if (g_usedDSPs[i] != NULL)
       g_usedDSPs[i]->UpdateDelay(channel);
@@ -950,46 +904,21 @@ void cDSPProcessor::SetTestSound(AE_DSP_CHANNEL channel, int mode, CGUIDialogSpe
 {
   CLockObject lock(m_Mutex);
 
-  if (g_usedDSPs[m_lastStreamId] != NULL)
-    g_usedDSPs[m_lastStreamId]->SetTestSound(channel, mode, cbClass, continues);
+  for (int i = 0; i < AE_DSP_STREAM_MAX_STREAMS; ++i)
+  {
+    if (g_usedDSPs[i] != NULL)
+      g_usedDSPs[i]->SetTestSound(channel, mode, cbClass, continues);
+  }
 }
 
 CDSPProcessMaster *cDSPProcessor::GetProcessMaster(unsigned streamId)
 {
-  if (streamId >= AE_DSP_STREAM_MAX_STREAMS)
-    streamId = 0;
-
   CLockObject lock(m_Mutex);
-  if (g_usedDSPs[streamId] == NULL)
-    return NULL;
-  if (g_usedDSPs[streamId]->m_MasterCurrrentMode == NULL)
+  if (streamId >= AE_DSP_STREAM_MAX_STREAMS ||
+      g_usedDSPs[streamId] == NULL ||
+      g_usedDSPs[streamId]->m_MasterCurrrentMode == NULL)
     return NULL;
 
   return g_usedDSPs[streamId]->m_MasterCurrrentMode;
 }
 
-unsigned long cDSPProcessor::GetOutChannelPresentFlags(AE_DSP_STREAM_ID streamId)
-{
-  if (streamId >= AE_DSP_STREAM_MAX_STREAMS)
-    streamId = 0;
-
-  CLockObject lock(m_Mutex);
-  if (g_usedDSPs[streamId] == NULL)
-    return 0;
-
-  AE_DSP_SETTINGS *settings = g_usedDSPs[streamId]->GetStreamSettings();
-  return settings->lOutChannelPresentFlags;
-}
-
-int cDSPProcessor::GetMasterModeStreamType(AE_DSP_STREAM_ID streamId)
-{
-  if (streamId >= AE_DSP_STREAM_MAX_STREAMS)
-    streamId = 0;
-
-  CLockObject lock(m_Mutex);
-  if (g_usedDSPs[streamId] == NULL)
-    return 0;
-
-  AE_DSP_SETTINGS *settings = g_usedDSPs[streamId]->GetStreamSettings();
-  return settings->iStreamType;
-}
