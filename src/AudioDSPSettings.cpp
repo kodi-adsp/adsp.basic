@@ -125,7 +125,7 @@ bool CDSPSettings::LoadSettingsData(int settingId, bool initial)
   }
 
   TiXmlElement *pRootElement = xmlDoc.RootElement();
-  if (strcmp(pRootElement->Value(), "demo") != 0)
+  if (strcmp(pRootElement->Value(), "adspBasic") != 0)
   {
     if (!initial)
       KODI->Log(LOG_ERROR, "invalid settings data (no <demo> tag found)");
@@ -174,21 +174,23 @@ bool CDSPSettings::LoadSettingsData(int settingId, bool initial)
 bool CDSPSettings::SaveSettingsData()
 {
   TiXmlDocument xmlDoc;
-  TiXmlElement *xmlRootElement = new TiXmlElement("demo");
-  xmlDoc.LinkEndChild(xmlRootElement);
+  TiXmlDeclaration * decl         = new TiXmlDeclaration("1.0", "", "");
+  TiXmlElement * xmlRootElement   = new TiXmlElement("adspBasic");
+  TiXmlNode * xmlChannelsSetting  = new TiXmlElement("channels");
 
-  TiXmlElement *xmlChannelsSetting = new TiXmlElement("channels");
-  xmlRootElement->LinkEndChild(xmlChannelsSetting);
   for (int i = 0; i < AE_DSP_CH_MAX; ++i)
   {
-    TiXmlElement *xmlSetting = new TiXmlElement("channel");
-    xmlRootElement->LinkEndChild(xmlSetting);
-      
-    XMLUtils::SetInt(xmlSetting, "number", i);
-    XMLUtils::SetString(xmlSetting, "name", m_Settings.m_channels[i].strName.c_str());
-    XMLUtils::SetInt(xmlSetting, "volume", m_Settings.m_channels[i].iVolumeCorrection);
-    XMLUtils::SetInt(xmlSetting, "distance", m_Settings.m_channels[i].iDistanceCorrection);
+    TiXmlNode * pChannelNode = new TiXmlElement("channel");
+    XMLUtils::SetInt(pChannelNode, "number", i);
+    XMLUtils::SetString(pChannelNode, "name", m_Settings.m_channels[i].strName.c_str());
+    XMLUtils::SetInt(pChannelNode, "volume", m_Settings.m_channels[i].iVolumeCorrection);
+    XMLUtils::SetInt(pChannelNode, "distance", m_Settings.m_channels[i].iDistanceCorrection);
+    xmlChannelsSetting->LinkEndChild(pChannelNode);
   }
+
+  xmlRootElement->LinkEndChild(xmlChannelsSetting);
+  xmlDoc.LinkEndChild(decl);
+  xmlDoc.LinkEndChild(xmlRootElement);
 
   if (!xmlDoc.SaveFile(GetSettingsFile()))
   {
