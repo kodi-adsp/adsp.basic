@@ -175,26 +175,20 @@ bool CDSPSettings::SaveSettingsData()
 {
   TiXmlDocument xmlDoc;
   TiXmlElement *xmlRootElement = new TiXmlElement("demo");
-  TiXmlNode *pRoot = xmlDoc.InsertEndChild(xmlRootElement);
-  if (pRoot == NULL)
-    return false;
+  xmlDoc.LinkEndChild(xmlRootElement);
 
   TiXmlElement *xmlChannelsSetting = new TiXmlElement("channels");
-  TiXmlNode* pChannelsNode = pRoot->InsertEndChild(xmlChannelsSetting);
-  if (pChannelsNode)
+  pRoot->LinkEndChild(xmlChannelsSetting);
+
+  for (int i = 0; i < AE_DSP_CH_MAX; ++i)
   {
-    for (int i = 0; i < AE_DSP_CH_MAX; ++i)
-    {
-      TiXmlElement *xmlSetting = new TiXmlElement("channel");
-      TiXmlNode* pChannelNode = pChannelsNode->InsertEndChild(xmlSetting);
-      if (pChannelNode)
-      {
-        XMLUtils::SetInt(pChannelNode, "number", i);
-        XMLUtils::SetString(pChannelNode, "name", m_Settings.m_channels[i].strName.c_str());
-        XMLUtils::SetInt(pChannelNode, "volume", m_Settings.m_channels[i].iVolumeCorrection);
-        XMLUtils::SetInt(pChannelNode, "distance", m_Settings.m_channels[i].iDistanceCorrection);
-      }
-    }
+    TiXmlElement *xmlSetting = new TiXmlElement("channel");
+    XMLUtils::SetInt(xmlSetting, "number", i);
+    XMLUtils::SetString(xmlSetting, "name", m_Settings.m_channels[i].strName.c_str());
+    XMLUtils::SetInt(xmlSetting, "volume", m_Settings.m_channels[i].iVolumeCorrection);
+    XMLUtils::SetInt(xmlSetting, "distance", m_Settings.m_channels[i].iDistanceCorrection);
+    
+    pRoot->InsertEndChild(xmlSetting);
   }
 
 
