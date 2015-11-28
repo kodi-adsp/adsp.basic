@@ -178,19 +178,17 @@ bool CDSPSettings::SaveSettingsData()
   xmlDoc.LinkEndChild(xmlRootElement);
 
   TiXmlElement *xmlChannelsSetting = new TiXmlElement("channels");
-  pRoot->LinkEndChild(xmlChannelsSetting);
-
+  xmlRootElement->LinkEndChild(xmlChannelsSetting);
   for (int i = 0; i < AE_DSP_CH_MAX; ++i)
   {
     TiXmlElement *xmlSetting = new TiXmlElement("channel");
+    xmlRootElement->LinkEndChild(xmlSetting);
+      
     XMLUtils::SetInt(xmlSetting, "number", i);
     XMLUtils::SetString(xmlSetting, "name", m_Settings.m_channels[i].strName.c_str());
     XMLUtils::SetInt(xmlSetting, "volume", m_Settings.m_channels[i].iVolumeCorrection);
     XMLUtils::SetInt(xmlSetting, "distance", m_Settings.m_channels[i].iDistanceCorrection);
-    
-    pRoot->InsertEndChild(xmlSetting);
   }
-
 
   if (!xmlDoc.SaveFile(GetSettingsFile()))
   {
