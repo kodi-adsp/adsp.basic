@@ -174,18 +174,18 @@ bool CDSPSettings::LoadSettingsData(int settingId, bool initial)
 bool CDSPSettings::SaveSettingsData()
 {
   TiXmlDocument xmlDoc;
-  TiXmlElement xmlRootElement("demo");
+  TiXmlElement *xmlRootElement = new TiXmlElement("demo");
   TiXmlNode *pRoot = xmlDoc.InsertEndChild(xmlRootElement);
   if (pRoot == NULL)
     return false;
 
-  TiXmlElement xmlChannelsSetting("channels");
+  TiXmlElement *xmlChannelsSetting = new TiXmlElement("channels");
   TiXmlNode* pChannelsNode = pRoot->InsertEndChild(xmlChannelsSetting);
   if (pChannelsNode)
   {
     for (int i = 0; i < AE_DSP_CH_MAX; ++i)
     {
-      TiXmlElement xmlSetting("channel");
+      TiXmlElement *xmlSetting = new TiXmlElement("channel");
       TiXmlNode* pChannelNode = pChannelsNode->InsertEndChild(xmlSetting);
       if (pChannelNode)
       {
