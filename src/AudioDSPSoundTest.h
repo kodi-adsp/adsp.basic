@@ -18,8 +18,8 @@
  *
  */
 
-#include "platform/threads/threads.h"
-#include "platform/threads/mutex.h"
+#include "p8-platform/threads/threads.h"
+#include "p8-platform/threads/mutex.h"
 
 #define SOUND_TEST_OFF              0
 #define SOUND_TEST_PINK_NOICE       1
@@ -51,6 +51,6 @@ private:
   unsigned long     m_OutChannelPresentFlags;
   cPinkNoise       *m_NoiseSource;
   CAddonSoundPlay  *m_TestSound;
-  PLATFORM::CMutex  m_Mutex;
+  P8PLATFORM::CMutex  m_Mutex;
   CGUIDialogSpeakerGain *m_ContinueTestCBClass;
 };

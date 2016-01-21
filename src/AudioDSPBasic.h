@@ -24,8 +24,8 @@
 
 #include "kodi/kodi_adsp_types.h"
 
-#include "platform/threads/threads.h"
-#include "platform/threads/mutex.h"
+#include "p8-platform/threads/threads.h"
+#include "p8-platform/threads/mutex.h"
 #include "filter/delay.h"
 
 #include "DSPProcessMaster.h"
@@ -52,7 +52,7 @@ class cDSPProcessor;
 class cDSPProcessorSoundTest;
 class CGUIDialogSpeakerGain;
 
-using namespace PLATFORM;
+using namespace P8PLATFORM;
 
 typedef std::map<unsigned int, CDSPProcessMaster *> masterModesMap;
 
@@ -209,7 +209,7 @@ protected:
   bool                     m_SpeakerCorrection;
   unsigned long            m_outChannelPresentFlags;
 
-  PLATFORM::CMutex         m_Mutex;
+  P8PLATFORM::CMutex         m_Mutex;
 };
 
 extern cDSPProcessor g_DSPProcessor;

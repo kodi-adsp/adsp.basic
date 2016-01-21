@@ -23,7 +23,7 @@
 #include "GUIDialogSpeakerGain.h"
 #include "AudioDSPSoundTest.h"
 
-using namespace PLATFORM;
+using namespace P8PLATFORM;
 using namespace ADDON;
 
 cDSPProcessorSoundTest::cDSPProcessorSoundTest(unsigned long outChannelPresentFlags, CGUIDialogSpeakerGain *cbClass)
