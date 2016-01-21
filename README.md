@@ -1,3 +1,5 @@
+[![Linux Build Status](https://travis-ci.org/kodi-adsp/adsp.basic.svg?branch=master)](https://travis-ci.org/kodi-adsp/adsp.basic)
+
 ### adsp.basic
 -------------
 *<p align="center">![alt tag](https://github.com/kodi-adsp/adsp.basic/blob/master/adsp.basic/icon.png)</p>*
