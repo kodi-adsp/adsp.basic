@@ -1,6 +1,6 @@
 #### CI Testing
 * Tarvis-CI for OS X, iOS, Linux [![Build Status](https://travis-ci.org/kodi-adsp/adsp.basic.svg?branch=master)](https://travis-ci.org/kodi-adsp/adsp.basic)
-* AppVeyor for Windows [![Build status](https://ci.appveyor.com/api/projects/status/p3pd175e1leas49a/branch/master?svg=true)](https://ci.appveyor.com/project/AchimTuran/adsp-basic/branch/master)
+* AppVeyor for Windows [![Build status](https://ci.appveyor.com/api/projects/status/3o1cfunq1wggq6l0/branch/master?svg=true)](https://ci.appveyor.com/project/james4kodi-adsp/adsp-basic/branch/master)
 * Code analyses for Linux [![Coverity Scan Build Status](https://scan.coverity.com/projects/5120/badge.svg)](https://scan.coverity.com/projects/5120)
 
 # Basic AudioDSP add-on for [Kodi] (http://kodi.tv)
