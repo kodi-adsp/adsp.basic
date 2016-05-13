@@ -20,12 +20,12 @@
 #include <math.h>
 #include <vector>
 
-#include "kodi/libXBMC_addon.h"
-#include "kodi/libKODI_adsp.h"
-#include "kodi/libKODI_guilib.h"
+#include "libXBMC_addon.h"
+#include "libKODI_adsp.h"
+#include "libKODI_guilib.h"
 
 #include "addon.h"
-#include "kodi/util/XMLUtils.h"
+#include "util/XMLUtils.h"
 #include "p8-platform/util/util.h"
 #include "p8-platform/util/StdString.h"
 
