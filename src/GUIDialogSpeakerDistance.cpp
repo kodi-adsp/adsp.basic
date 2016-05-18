@@ -50,7 +50,7 @@ CGUIDialogSpeakerDistance::CGUIDialogSpeakerDistance(unsigned int streamId)
     , m_window(NULL)
     , m_spinSpeakerDistanceUnit(NULL)
 {
-  m_window              = GUI->Window_create("DialogSpeakerDistance.xml", "Confluence", false, true);
+  m_window              = GUI->Window_create("DialogSpeakerDistance.xml", "skin.estuary", false, true);
   m_window->m_cbhdl     = this;
   m_window->CBOnInit    = OnInitCB;
   m_window->CBOnFocus   = OnFocusCB;
