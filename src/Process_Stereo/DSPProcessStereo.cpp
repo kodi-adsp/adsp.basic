@@ -22,8 +22,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "kodi/libXBMC_addon.h"
-#include "kodi/libKODI_adsp.h"
+#include "libXBMC_addon.h"
+#include "libKODI_adsp.h"
 
 #include "DSPProcessStereo.h"
 #include "../addon.h"

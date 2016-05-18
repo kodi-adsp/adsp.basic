@@ -22,7 +22,7 @@
 #include <vector>
 #include <map>
 
-#include "kodi/kodi_adsp_types.h"
+#include "kodi_adsp_types.h"
 
 #include "p8-platform/threads/threads.h"
 #include "p8-platform/threads/mutex.h"

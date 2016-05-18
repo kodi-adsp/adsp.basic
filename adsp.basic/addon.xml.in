@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
 	id="adsp.basic"
-	version="0.2.0"
+	version="0.3.0"
 	name="Audio DSP Basic Processor"
 	provider-name="Team KODI">
 	<requires>
@@ -10,11 +10,7 @@
 	</requires>
 	<extension
 		point="kodi.adsp"
-		library_linux="adsp.basic.so"
-		library_osx="adsp.basic.dylib"
-		library_wingl="adsp.basic.dll"
-		library_windx="adsp.basic.dll"
-		library_android="libadsp.basic.so" />
+		library_@PLATFORM@="@LIBRARY_FILENAME@"/>
 	<extension point="kodi.addon.metadata">
 		<summary lang="en">Basic audio DSP processor</summary>
 		<description lang="en">
@@ -22,7 +18,7 @@ This add-on contains basic dsp related parts to handle speaker delays, channel r
 
 As mode it support a Dolby Pro Logic II compatible multichannel downmix to stereo, which becomes available if only 2 channel output on Kodi is selected.</description>
 		<disclaimer lang="en">This addon is still in development to increase amount of features, e.g. speaker position changes.</disclaimer>
-		<platform>all</platform>
+		<platform>@PLATFORM@</platform>
 		<license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
 		<forum></forum>
 		<website></website>
