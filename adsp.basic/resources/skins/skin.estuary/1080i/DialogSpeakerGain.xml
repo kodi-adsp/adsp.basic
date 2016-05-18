@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+	<defaultcontrol always="true">10</defaultcontrol>
+	<backgroundcolor>background</backgroundcolor>
+	<allowoverlay>no</allowoverlay>
+	<coordinates>
+		<posx>200</posx>
+		<posy>105</posy>
+	</coordinates>
+	<include>Animation_DialogPopupOpenClose</include>
+	<controls>
+		<control type="group">
+			<include>Animation_DialogPopupVisible</include>
+				<visible>!Window.IsVisible(sliderdialog)</visible>
+				<include content="DialogBackgroundCommons">
+				<param name="DialogBackgroundWidth" value="1520" />
+				<param name="DialogBackgroundHeight" value="870" />
+				<param name="DialogHeaderLabel" value="$ADDON[adsp.basic 30021]" />
+			</include>
+			<control type="image">
+				<left>10</left>
+				<top>80</top>
+				<width>1200</width>
+				<height>790</height>
+				<texture border="40">buttons/dialogbutton-nofo.png</texture>
+			</control>
+			<control type="grouplist" id="9000">
+				<posx>29</posx>
+				<posy>100</posy>
+				<width>1160</width>
+				<height>750</height>
+				<onleft>9001</onleft>
+				<onright>60</onright>
+				<pagecontrol>60</pagecontrol>
+				<control type="spincontrolex" id="10">
+					<description>Speaker Gain Test</description>
+					<width>1160</width>
+					<label>$ADDON[adsp.basic 30022]</label>
+					<include>DefaultSettingButton</include>
+				</control>
+				<control type="radiobutton" id="11">
+					<description>Speaker continues test</description>
+					<width>1160</width>
+					<label>$ADDON[adsp.basic 30065]</label>
+					<include>DefaultSettingButton</include>
+				</control>
+				<control type="label" id="100">
+					<description>Dummy</description>
+					<width>1160</width>
+					<visible>!Control.IsVisible(11)</visible>
+					<label></label>
+					<include>DefaultSettingButton</include>
+				</control>
+				<control type="image" id="101">
+					<description>Default Seperator</description>
+					<height>3</height>
+					<texture colordiffuse="AAAAAAAA" border="3">dialogs/separator-grey.png</texture>
+				</control>
+				<control type="spincontrolex" id="13"><!--    AE_DSP_CH_FL-->
+					<description>Speaker Distance FL</description>
+					<width>1160</width>
+					<label>$ADDON[adsp.basic 30031]</label>
+					<include>DefaultSettingButton</include>
+				</control>
+				<control type="spincontrolex" id="24"><!--    AE_DSP_CH_TFL-->
+					<description>Speaker Distance TFL</description>
+					<width>1160</width>
+					<label>$ADDON[adsp.basic 30054]</label>
+					<include>DefaultSettingButton</include>
+				</control>
+				<control type="spincontrolex" id="19"><!--    AE_DSP_CH_FLOC-->
+					<description>Speaker Distance FLOC</description>
+					<width>1160</width>
+					<label>$ADDON[adsp.basic 30052]</label>
+					<include>DefaultSettingButton</include>
+				</control>
+				<control type="spincontrolex" id="15"><!--    AE_DSP_CH_FC-->
+					<description>Speaker Distance Center</description>
+					<width>1160</width>
+					<label>$ADDON[adsp.basic 30037]</label>
+					<include>DefaultSettingButton</include>
+				</control>
+				<control type="spincontrolex" id="26"><!--    AE_DSP_CH_TFC-->
+					<description>Speaker Distance TFC</description>
+					<width>1160</width>
+					<label>$ADDON[adsp.basic 30056]</label>
+					<include>DefaultSettingButton</include>
+				</control>
+				<control type="spincontrolex" id="20"><!--    AE_DSP_CH_FROC-->
+					<description>Speaker Distance FLOC</description>
+					<width>1160</width>
+					<label>$ADDON[adsp.basic 30053]</label>
+					<include>DefaultSettingButton</include>
+				</control>
+				<control type="spincontrolex" id="25"><!--    AE_DSP_CH_TFR-->
+					<description>Speaker Distance TFR</description>
+					<width>1160</width>
+					<label>$ADDON[adsp.basic 30055]</label>
+					<include>DefaultSettingButton</include>
+				</control>
+				<control type="spincontrolex" id="14"><!--    AE_DSP_CH_FR-->
+					<description>Speaker Distance FR</description>
+					<width>1160</width>
+					<label>$ADDON[adsp.basic 30032]</label>
+					<include>DefaultSettingButton</include>
+				</control>
+				<control type="spincontrolex" id="23"><!--    AE_DSP_CH_SR-->
+					<description>Speaker Distance SR</description>
+					<width>1160</width>
+					<label>$ADDON[adsp.basic 30034]</label>
+					<include>DefaultSettingButton</include>
+				</control>
+				<control type="spincontrolex" id="18"><!--    AE_DSP_CH_BR-->
+					<description>Speaker Distance BR</description>
+					<width>1160</width>
+					<label>$ADDON[adsp.basic 30036]</label>
+					<include>DefaultSettingButton</include>
+				</control>
+				<control type="spincontrolex" id="29"><!--    AE_DSP_CH_TBR-->
+					<description>Speaker Distance TBL</description>
+					<width>1160</width>
+					<label>$ADDON[adsp.basic 30063]</label>
+					<include>DefaultSettingButton</include>
+				</control>
+				<control type="spincontrolex" id="32"><!--    AE_DSP_CH_BROC-->
+					<description>Speaker Distance BROC</description>
+					<width>1160</width>
+					<label>$ADDON[adsp.basic 30062]</label>
+					<include>DefaultSettingButton</include>
+				</control>
+				<control type="spincontrolex" id="21"><!--    AE_DSP_CH_BC-->
+					<description>Speaker Distance BC</description>
+					<width>1160</width>
+					<label>$ADDON[adsp.basic 30039]</label>
+					<include>DefaultSettingButton</include>
+				</control>
+				<control type="spincontrolex" id="30"><!--    AE_DSP_CH_TBC-->
+					<description>Speaker Distance TBC</description>
+					<width>1160</width>
+					<label>$ADDON[adsp.basic 30060]</label>
+					<include>DefaultSettingButton</include>
+				</control>
+				<control type="spincontrolex" id="31"><!--    AE_DSP_CH_BLOC-->
+					<description>Speaker Distance BLOC</description>
+					<width>1160</width>
+					<label>$ADDON[adsp.basic 30061]</label>
+					<include>DefaultSettingButton</include>
+				</control>
+				<control type="spincontrolex" id="28"><!--    AE_DSP_CH_TBL-->
+					<description>Speaker Distance TBL</description>
+					<width>1160</width>
+					<label>$ADDON[adsp.basic 30063]</label>
+					<include>DefaultSettingButton</include>
+				</control>
+				<control type="spincontrolex" id="17"><!--    AE_DSP_CH_BL-->
+					<description>Speaker Distance BL</description>
+					<width>1160</width>
+					<label>$ADDON[adsp.basic 30035]</label>
+					<include>DefaultSettingButton</include>
+				</control>
+				<control type="spincontrolex" id="22"><!--    AE_DSP_CH_SL-->
+					<description>Speaker Distance SL</description>
+					<width>1160</width>
+					<label>$ADDON[adsp.basic 30033]</label>
+					<include>DefaultSettingButton</include>
+				</control>
+				<control type="spincontrolex" id="27"><!--    AE_DSP_CH_TC-->
+					<description>Speaker Distance Top Center</description>
+					<width>1160</width>
+					<label>$ADDON[adsp.basic 30057]</label>
+					<include>DefaultSettingButton</include>
+				</control>
+				<control type="spincontrolex" id="16"><!--    AE_DSP_CH_LFE-->
+					<description>Speaker Distance Sub</description>
+					<width>1160</width>
+					<label>$ADDON[adsp.basic 30038]</label>
+					<include>DefaultSettingButton</include>
+				</control>
+			</control>
+			<control type="group" id="9001">
+				<left>1210</left>
+				<top>92</top>
+				<orientation>vertical</orientation>
+				<width>300</width>
+				<height>250</height>
+				<itemgap>-10</itemgap>
+				<control type="button" id="1">
+					<description>Ok Button</description>
+					<posy>0</posy>
+					<height>90</height>
+					<align>center</align>
+					<aligny>center</aligny>
+					<label>186</label>
+					<font>font12_title</font>
+					<onup>2</onup>
+					<onleft>60</onleft>
+					<onright>9000</onright>
+					<ondown>2</ondown>
+					<include>DefaultDialogButton</include>
+				</control>
+				<control type="button" id="2">
+					<description>Cancel Button</description>
+					<posy>75</posy>
+					<height>90</height>
+					<align>center</align>
+					<aligny>center</aligny>
+					<label>222</label>
+					<font>font12_title</font>
+					<onup>1</onup>
+					<onleft>60</onleft>
+					<onright>9000</onright>
+					<ondown>1</ondown>
+					<include>DefaultDialogButton</include>
+				</control>
+			</control>
+			<control type="label" id="12">
+				<description>Continues test speaker position</description>
+				<left>1210</left>
+				<top>790</top>
+				<width>300</width>
+				<label></label>
+				<include>DefaultSettingLabel</include>
+			</control>
+			<control type="scrollbar" id="60">
+				<left>1190</left>
+				<top>100</top>
+				<width>12</width>
+				<height>750</height>
+				<onleft>9000</onleft>
+				<onright>9001</onright>
+				<orientation>vertical</orientation>
+			</control>
+		</control>
+	</controls>
+</window>
