@@ -18,7 +18,7 @@
  *
  */
 
-#include "kodi/kodi_adsp_types.h"
+#include "kodi_adsp_types.h"
 
 #define ID_MENU_SPEAKER_GAIN_SETUP                      1
 #define ID_MENU_SPEAKER_DISTANCE_SETUP                  2
