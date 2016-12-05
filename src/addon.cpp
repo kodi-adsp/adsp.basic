@@ -164,6 +164,15 @@ void ADDON_Announce(const char *flag, const char *sender, const char *message, c
 {
 }
 
+ADDON_STATUS ADDON_CreateInstance(int instanceType, const char* instanceID, const void* instanceProps, void* instanceFunctions, void* kodiInstance, void** addonInstance)
+{
+  return ADDON_STATUS_UNKNOWN;
+}
+
+void ADDON_DestroyInstance(int instanceType, const char* instanceID, void* instance)
+{
+}
+
 
 /***********************************************************
  * Audio DSP Client AddOn specific public library functions
