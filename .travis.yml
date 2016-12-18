@@ -36,7 +36,7 @@ before_install:
 #
 before_script:
   - cd $TRAVIS_BUILD_DIR/..
-  - git clone --depth=1 https://github.com/xbmc/xbmc.git
+  - git clone --depth=1 https://github.com/FernetMenta/kodi-agile
   - cd adsp.basic && mkdir build && cd build
   - cmake -DADDONS_TO_BUILD=adsp.basic -DADDON_SRC_PREFIX=../../../.. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=../../xbmc/addons -DPACKAGE_ZIP=1 ../../xbmc/project/cmake/addons
 

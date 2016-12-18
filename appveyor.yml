@@ -67,7 +67,7 @@ build_script:
   - cd ..
   - ren "%APPVEYOR_BUILD_FOLDER%" "%addon_id%"
   - mkdir package
-  - git clone --depth=1 https://github.com/xbmc/xbmc.git
+  - git clone --depth=1 https://github.com/FernetMenta/kodi-agile
   - cd "%addon_id%"
   - mkdir build 
   - cd build
