@@ -152,10 +152,6 @@ ADDON_STATUS ADDON_SetSetting(const char *settingName, const void *settingValue)
   return g_DSPProcessor.SetSetting(settingName, settingValue);
 }
 
-void ADDON_Stop()
-{
-}
-
 void ADDON_FreeSettings()
 {
 }
