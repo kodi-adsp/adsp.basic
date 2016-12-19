@@ -174,26 +174,6 @@ void ADDON_DestroyInstance(int instanceType, const char* instanceID, void* insta
  * Audio DSP Client AddOn specific public library functions
  ***********************************************************/
 
-const char* GetAudioDSPAPIVersion(void)
-{
-  return KODI_AE_DSP_API_VERSION;
-}
-
-const char* GetMinimumAudioDSPAPIVersion(void)
-{
-  return KODI_AE_DSP_MIN_API_VERSION;
-}
-
-const char* GetGUIAPIVersion(void)
-{
-  return KODI_GUILIB_API_VERSION;
-}
-
-const char* GetMinimumGUIAPIVersion(void)
-{
-  return KODI_GUILIB_MIN_API_VERSION;
-}
-
 AE_DSP_ERROR GetAddonCapabilities(AE_DSP_ADDON_CAPABILITIES* pCapabilities)
 {
   pCapabilities->bSupportsInputProcess    = g_DSPProcessor.SupportsInputProcess();
