@@ -6,7 +6,7 @@
 	provider-name="Team KODI">
 	<requires>
 		<c-pluff version="0.1"/>
-		<import addon="kodi.adsp" version="0.1.8"/>
+		<import addon="kodi.adsp" version="0.1.9"/>
 	</requires>
 	<extension
 		point="kodi.adsp"
