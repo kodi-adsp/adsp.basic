@@ -174,7 +174,7 @@ void ADDON_DestroyInstance(int instanceType, const char* instanceID, void* insta
  * Audio DSP Client AddOn specific public library functions
  ***********************************************************/
 
-AE_DSP_ERROR GetAddonCapabilities(AE_DSP_ADDON_CAPABILITIES* pCapabilities)
+void GetCapabilities(AE_DSP_ADDON_CAPABILITIES* pCapabilities)
 {
   pCapabilities->bSupportsInputProcess    = g_DSPProcessor.SupportsInputProcess();
   pCapabilities->bSupportsInputResample   = g_DSPProcessor.SupportsInputResample();
@@ -182,8 +182,6 @@ AE_DSP_ERROR GetAddonCapabilities(AE_DSP_ADDON_CAPABILITIES* pCapabilities)
   pCapabilities->bSupportsMasterProcess   = g_DSPProcessor.SupportsMasterProcess();
   pCapabilities->bSupportsPostProcess     = g_DSPProcessor.SupportsPostProcess();
   pCapabilities->bSupportsOutputResample  = g_DSPProcessor.SupportsOutputResample();
-
-  return AE_DSP_ERROR_NO_ERROR;
 }
 
 const char *GetDSPName(void)
